@@ -1,4 +1,4 @@
-const CACHE = 'berkahroso-v1.1.0'; // [DIUBAH] sinkron penuh dengan fitur Chicken Day: cache saldo awal, banner backup, validasi nominal, history Keterangan, daftar entry terbaru-di-atas + ringkas
+const CACHE = 'berkahroso-v1.2.0'; // [DIUBAH] 4 perbaikan UX: modal nama file custom, tombol Hapus dipisah+warna danger stabil, kontras saldo awal, undo hapus entry
 const ASSETS = [
   './',
   './index.html',
