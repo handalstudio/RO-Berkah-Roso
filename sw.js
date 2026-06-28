@@ -1,4 +1,4 @@
-const CACHE = 'berkahroso-v1.2.1'; // [DIUBAH] dialog konfirmasi sebelum backup .json + fix z-index modal nama file/backup yang ketutup panel Pengaturan
+const CACHE = 'berkahroso-v1.3.0'; // [DIUBAH] Petugas jadi daftar tertutup (pill, dikelola di Pengaturan) + Debit/Kredit saling mengunci inline
 const ASSETS = [
   './',
   './index.html',
