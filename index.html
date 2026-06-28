@@ -172,6 +172,9 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,s
 .pin-batal{background:none;border:none;color:var(--ink-faint);font-size:12.5px;cursor:pointer;text-decoration:underline;font-family:inherit;padding:4px}
 /* Pengaturan panel */
 .panel-overlay{position:fixed;inset:0;background:rgba(43,33,24,0.5);z-index:150;display:none;align-items:flex-end;justify-content:center;backdrop-filter:blur(2px)}
+/* [DIUBAH] modal-filename & modal-backup bisa dipicu dari DALAM panel Pengaturan (z-index 150),
+   jadi z-index-nya harus lebih tinggi dari panel-overlay, bukan ikut default .modal-bg (100) */
+#modal-filename,#modal-backup{z-index:220}
 .panel-overlay.show{display:flex}
 .panel{background:var(--card);border-radius:20px 20px 0 0;padding:22px 20px 36px;width:100%;max-width:440px;max-height:88vh;overflow-y:auto}
 .panel-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
@@ -349,6 +352,18 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,s
     <div class="modal-btns">
       <button onclick="batalNamaFile()">Batal</button>
       <button class="confirm-primary" onclick="konfirmasiNamaFile()">Unduh</button>
+    </div>
+  </div>
+</div>
+
+<!-- [BARU] Modal konfirmasi backup -->
+<div class="modal-bg" id="modal-backup">
+  <div class="modal">
+    <h3>Backup Data?</h3>
+    <p id="modal-backup-text">Data akan diunduh sebagai file .json.</p>
+    <div class="modal-btns">
+      <button onclick="batalBackup()">Batal</button>
+      <button class="confirm-primary" onclick="konfirmasiBackup()">Unduh</button>
     </div>
   </div>
 </div>
@@ -1042,20 +1057,33 @@ function downloadXLSX(){
 }
 
 /* ========== BACKUP & RESTORE ========== */
+// [DIUBAH] backupJSON sekarang menampilkan modal konfirmasi dulu (jumlah hari yang akan dibackup),
+// proses build & unduh file sebenarnya baru jalan di konfirmasiBackup() setelah user tekan "Unduh".
 function backupJSON(){
+  const arsipKeys=getAllArsipKeys();
+  const total=arsipKeys.length+(entries.length?1:0);
+  if(!total){toast('Tidak ada data untuk dibackup');return;}
+  document.getElementById('modal-backup-text').textContent=
+    `Akan diunduh sebagai file .json berisi ${total} hari data (arsip + hari ini). Simpan sebagai cadangan.`;
+  document.getElementById('modal-backup').classList.add('show');
+}
+function batalBackup(){
+  document.getElementById('modal-backup').classList.remove('show');
+}
+function konfirmasiBackup(){
+  document.getElementById('modal-backup').classList.remove('show');
   const arsipKeys=getAllArsipKeys();
   const backup={versi:1,dibuat:new Date().toISOString(),outlet:'Berkah Roso',hariIni:{tanggal:todayStr,entries,exportedExcel,exportedWA},arsip:{}};
   arsipKeys.forEach(k=>{
     try{const d=JSON.parse(localStorage.getItem(k));if(d)backup.arsip[k]=d;}catch(e){}
   });
   const total=arsipKeys.length+(entries.length?1:0);
-  if(!total){toast('Tidak ada data untuk dibackup');return;}
   const blob=new Blob([JSON.stringify(backup,null,2)],{type:'application/json'});
   const url=URL.createObjectURL(blob);
   const a=document.createElement('a');
   a.href=url;a.download=`backup_RO_BR_${todayStr}.json`;a.click();URL.revokeObjectURL(url);
   localStorage.setItem(LAST_BACKUP_KEY,Date.now().toString());
-  updateBackupReminder(); // [BARU] banner hilang langsung, tidak nunggu render lain
+  updateBackupReminder();
   toast(`Backup diunduh (${total} hari)`);
 }
 

@@ -1,4 +1,4 @@
-const CACHE = 'berkahroso-v1.2.0'; // [DIUBAH] 4 perbaikan UX: modal nama file custom, tombol Hapus dipisah+warna danger stabil, kontras saldo awal, undo hapus entry
+const CACHE = 'berkahroso-v1.2.1'; // [DIUBAH] dialog konfirmasi sebelum backup .json + fix z-index modal nama file/backup yang ketutup panel Pengaturan
 const ASSETS = [
   './',
   './index.html',
