@@ -1,4 +1,4 @@
-const CACHE = 'berkahroso-v1.3.0'; // [DIUBAH] Petugas jadi daftar tertutup (pill, dikelola di Pengaturan) + Debit/Kredit saling mengunci inline
+const CACHE = 'berkahroso-v1.3.1'; // [DIUBAH] Petugas jadi daftar tertutup (pill, dikelola di Pengaturan) + Debit/Kredit saling mengunci inline
 const ASSETS = [
   './',
   './index.html',
